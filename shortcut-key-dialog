@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#Written by Storm Dragon
+#Released under the terms of the WTFPL LIcense: http://wtfpl.net
+
+#An accessible (to screen readers) dialog with currently defined ratpoison keyboard shortcuts.
+
+keyList="$(cat "$HOME/.ratpoisonrc" | tr -s "[:space:]" | grep -vi "unbind\|startup_message")"
+#format the keyList variable.
+keyList="$(echo "$keyList" | sed -e 's/^\(bind[ \t]*\)\([a-zA-Z0-9[:punct:]]\)[ \t]\(.*\)/"c-t \2" "\3"/' -e '/^exec/d' -e 's/\n$/ /g')"
+#create keyboard shortcuts dialog.
+#echo "$keyList"
+zenity --list --title "Ratpoison Keyboard Shortcuts" --ok-label Close --print-column all --column "Key" --column "Action" -- $keyList
+exit 0
