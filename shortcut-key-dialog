@@ -9,8 +9,8 @@ ifs="$IFS"
 IFS=$'\t'
 keyList="$(cat "$HOME/.ratpoisonrc" | grep -vi "unbind\|startup_message")"
 #format the keyList variable.
-keyList="$(echo -e "$keyList" | sed -e 's/^\(bind[ \t]*\)\([a-zA-Z0-9[:punct:]]\)[ \t]\(.*\)/c-t \2\t\3\t/' -e '/^exec/d' | tr -s "[:space:]")"
+keyList="$(echo -e "$keyList" | sed -e 's/^\(bind[ \t]*\)\([a-zA-Z0-9[:punct:]]*\)[ \t]\(.*\)/c-t \2\t\3\t/' -e '/^exec/d' | tr -s "[:space:]")"
 #create keyboard shortcuts dialog.
-zenity --list --title "Ratpoison Keyboard Shortcuts" --ok-label Close --column "Key" --column "Action" -- -- $keyList
+zenity --list --title "Ratpoison Keyboard Shortcuts" --ok-label Close --print-column all --column "Key" --column "Action" -- -- $keyList
 IFS="$ifs"
 exit 0
