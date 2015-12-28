@@ -8,4 +8,5 @@ bind f exec /usr/bin/seamonkey
 bind m exec /usr/bin/mumble
 exec /usr/bin/rpws init 4 -k
 exec /usr/bin/nemo -n
+exec /urs/bin/glipper
 exec /usr/bin/orca
