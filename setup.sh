@@ -41,6 +41,6 @@ done
 eval $__get_input_input="'$__get_input_answer'"
 }
 
-get_input answer "Please choose a color" red green -blue
-echo "$answer"
+# Set  path for helper scripts.
+path="${0##*/}"
 exit 0
