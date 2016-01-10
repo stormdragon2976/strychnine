@@ -4,9 +4,10 @@
 # Written by Storm Dragon
 # Released under the therms of the unlicense http://unlicense.org
 
-# Gloabal Variables
-true=0
+# Global Variables
 false=1
+true=0
+xdgPath="${XDG_CONFIG_HOME:-$HOME/.config}"
 
 # Get user input args are return variable, question, options
 get_input()
@@ -50,6 +51,62 @@ rc="${rc}"$'\n'"$@"
 fi
 }
 
+# Add music keybindings:
+set_music_keybindings()
+{
+add_setting "# Music player bindings:"
+case "${1##*/}" in
+"cmus")
+add_setting "bind Z exec ${musicPlayer}-remote -r # previous track"
+add_setting "bind X exec ${musicPlayer}-remote -p # play"
+add_setting "bind C exec ${musicPlayer}-remote -u # pause"
+add_setting "bind V exec ${musicPlayer}-remote -s # stop"
+add_setting "bind B exec ${musicPlayer}-remote -n # next track"
+add_setting "bind F11 exec ${musicPlayer}-remote -v -10% # decrease volume"
+add_setting "bind F12 exec ${musicPlayer}-remote -v +10% # increase volume"
+;;
+"moc")
+add_setting "bind Z exec ${musicPlayer} -r # previous track"
+add_setting "bind X exec ${musicPlayer} -p # play"
+add_setting "bind C exec ${musicPlayer} -G # pause"
+add_setting "bind V exec ${musicPlayer} -s # stop"
+add_setting "bind B exec ${musicPlayer} -f # next track"
+add_setting "bind F11 exec ${musicPlayer} -v -10 # decrease volume"
+add_setting "bind F12 exec ${musicPlayer} -v +10 # increase volume"
+;;
+"mpc")
+add_setting "bind Z exec ${musicPlayer} -q prev # previous track"
+add_setting "bind X exec ${musicPlayer} -q play # play"
+add_setting "bind C exec ${musicPlayer} -q pause # pause"
+add_setting "bind V exec ${musicPlayer} -q stop # stop"
+add_setting "bind B exec ${musicPlayer} -q next # next track"
+add_setting "bind F11 exec ${musicPlayer} -q volume -10 # decrease volume"
+add_setting "bind F12 exec ${musicPlayer} -q volume +10 # increase volume"
+;;
+"pianobar")
+add_setting "# Pianobar requires a fifo file for its keybindings to work"'\n'"# To create this file, do the following:"'$\n'"# mkfifo $xdgPath/pianobar/ctl"
+add_setting "# There is no previous track binding for Pianobar"
+add_setting "bind X exec echo -n 'P' > $xdgPath/pianobar/ctl # play"
+add_setting "bind C exec echo -n 'p' > $xdgPath/pianobar/ctl # pause"
+add_setting "bind V exec echo -n 'S' > $xdgPath/pianobar/ctl # stop"
+add_setting "bind B exec echo -n 'n' > $xdgPath/pianobar/ctl # next track"
+add_setting "bind F11 exec echo -n '(' > $xdgPath/pianobar/ctl # decrease volume"
+add_setting "bind F12 exec echo -n ')' > $xdgPath/pianobar/ctl # increase volume"
+;;
+"xmms2")
+# Insure volume keys will work:
+${musicPlayer} server config effect.order.0 equalizer
+${musicPlayer} server config equalizer.enabled 1
+add_setting "bind Z exec ${musicPlayer} prev # previous track"
+add_setting "bind X exec ${musicPlayer} play # play"
+add_setting "bind C exec ${musicPlayer} toggle # pause"
+add_setting "bind V exec ${musicPlayer} stop # stop"
+add_setting "bind B exec ${musicPlayer} next # next track"
+add_setting 'bind F11 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
+add_setting 'bind F12 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") + 10)) # increase volume'
+esac
+}
+
 # Make sure rc variable is empty
 unset rc
 # Set  path for helper scripts.
@@ -61,33 +118,23 @@ add_setting startup_message off
 # Unbind existing keys that lead to inaccessible things like xterm or keys that user wants to change:
 add_setting $'\n'"# Unbind section"
 add_setting unbind c
-read -p "Enter desired escape key, you can use f1-f12 or capslock too: c-" -e -i t escapeKey
-if [ -z "$escapeKey" ]; then
-escapeKey="t"
-fi
-if [ ${#escapeKey} -gt 1 ]; then
-escapeKey="${escapeKey,,}"
-fi
-if [ "$escapeKey" != "t" ]; then
+#read -p "Enter desired escape key, you can use f1-f12 or capslock too: C-" -e -i t escapeKey
+get_input escapeKey "Enter desired escape key:" -C-t -C-z C-Escape Super_L Super_R
+if [ "$escapeKey" != "C-t" ]; then
 add_setting unbind t
 fi
 
 # Key binding section
 add_setting $'\n'"# Key binding section"
 # Key binding section
-if [ ${#escapeKey} -eq 1 ]; then
-if [ "$escapeKey" != "t" ]; then
-add_setting escape c-$escapeKey
-fi
-fi
-if [[ "$escapeKey" =~ ^f[1-9]+$ ]]; then
-add_setting escape ${escapeKey^^}
+if [ "$escapeKey" != "C-t" ]; then
+add_setting escape $escapeKey
 fi
 add_setting "# Alt+tab switches through open windows"
 add_setting definekey top M-Tab next
 add_setting definekey top M-ISO_Left_Tab prev
 add_setting bind F1 exec ${path}/shortcut-key-dialog
-add_setting bind F2 ${path}/run-dialog
+add_setting bind F2 exec ${path}/run-dialog
 # Figure out which terminal emulator to use:
 unset programList
 for i in gnome-terminal mate-terminal -lxterminal ; do
@@ -109,7 +156,7 @@ terminal="${programList/#-/}"
 fi
 # Configure music player
 unset programList
-for i in cmus mopity mpc -xmms2 ; do
+for i in cmus moc mopity mpc pianobar -xmms2 ; do
 if hash ${i/#-/} &> /dev/null ; then
 if [ -n "$programList" ]; then
 programList="$programList $i"
@@ -123,11 +170,52 @@ get_input musicPlayer "Please select a music player:" $programList
 else
 musicPlayer="${programList/#-/}"
 fi
-if [ -n "$musicPlayer" ]; then musicPlayer="/usr/bin/$musicPlayer"
+if [ -n "$musicPlayer" ]; then
+musicPlayer="/usr/bin/$musicPlayer"
 fi
-echo "$musicPlayer"
-add_setting bind c /usr/bin/$terminal
-add_setting bind O /usr/bin/orca -r
+set_music_keybindings $musicPlayer
+# Configure file browser
+unset programList
+for i in -caja nemo pcmanfm ; do
+if hash ${i/#-/} &> /dev/null ; then
+if [ -n "$programList" ]; then
+programList="$programList $i"
+else
+programList="$i"
+fi
+fi
+done
+if [ "$programList" != "${programList// /}" ]; then
+get_input fileBrowser "Please select a file browser:" $programList
+else
+fileBrowser="${programList/#-/}"
+fi
+if [ -n "$fileBrowser" ]; then
+fileBrowser="/usr/bin/$fileBrowser"
+fi
+add_setting bind f exec $fileBrowser
+# Configure web browser
+unset programList
+for i in epiphany firefox midori -seamonkey ; do
+if hash ${i/#-/} &> /dev/null ; then
+if [ -n "$programList" ]; then
+programList="$programList $i"
+else
+programList="$i"
+fi
+fi
+done
+if [ "$programList" != "${programList// /}" ]; then
+get_input webBrowser "Please select a web browser:" $programList
+else
+webBrowser="${programList/#-/}"
+fi
+if [ -n "$webBrowser" ]; then
+webBrowser="/usr/bin/$webBrowser"
+fi
+add_setting bind w exec $webBrowser
+add_setting bind c exec /usr/bin/$terminal
+add_setting bind O exec /usr/bin/orca -r
 
 # Autostart section
 add_setting $'\n'"# Autostart section"
@@ -149,5 +237,5 @@ echo "$i was not found."
 fi
 done
 fi
-echo "$rc"
+echo "$rc" > $HOME/.ratpoisonrc
 exit 0
