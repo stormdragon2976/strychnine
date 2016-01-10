@@ -138,8 +138,8 @@ fi
 add_setting "# Alt+tab switches through open windows"
 add_setting definekey top M-Tab next
 add_setting definekey top M-ISO_Left_Tab prev
-add_setting bind F1 exec ${path}/shortcut-key-dialog
-add_setting bind F2 exec ${path}/run-dialog
+add_setting definekey top F1 exec ${path}/shortcut-key-dialog '# show existing shortcuts'
+add_setting definekey top M-F2 exec ${path}/run-dialog '# accessible run dialog'
 # Figure out which terminal emulator to use:
 unset programList
 for i in gnome-terminal mate-terminal -lxterminal ; do
@@ -255,6 +255,12 @@ else
 echo "$i was not found."
 fi
 done
+fi
+if [ -f "$HOME/.ratpoisonrc" ]; then
+get_input continue "$HOME/.ratpoisonrc exists. Over write it?" yes no
+if [ "$continue" = "no" ]; then
+exit 0
+fi
 fi
 echo "$rc" > $HOME/.ratpoisonrc
 exit 0
