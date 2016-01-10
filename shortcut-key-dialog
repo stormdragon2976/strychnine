@@ -13,7 +13,7 @@ escapeKey="$(echo "$escapeKey" | cut -d " " -f2)"
 fi
 ifs="$IFS"
 IFS=$'\t'
-keyList="$(grep -vi "^#\|^unbind\|^startup_message" "$HOME/.ratpoisonrc")"
+keyList="$(grep -vi "^define\|^escape\|^#\|^unbind\|^startup_message\|^set" "$HOME/.ratpoisonrc")"
 #format the keyList variable.
 keyList="$(echo -e "$keyList" | sed -e "s/^\(bind[ \t]*\)\([a-zA-Z0-9[:punct:]]*\)[ \t]\(.*\)/$escapeKey \2\t\3\t/" -e '/^exec/d' | tr -s "[:space:]")"
 #create keyboard shortcuts dialog.
