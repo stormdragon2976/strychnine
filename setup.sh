@@ -123,7 +123,7 @@ add_setting set waitcursor 45
 # Unbind existing keys that lead to inaccessible things like xterm or keys that user wants to change:
 add_setting $'\n'"# Unbind section"
 add_setting unbind c
-get_input escapeKey "Enter desired escape key:" C-t C-z -C-Escape C-Space Super_L Super_R
+get_input escapeKey "Enter desired escape key:" C-t C-z -C-Escape C-space Super_L Super_R
 if [ "$escapeKey" != "C-t" ]; then
 add_setting unbind t
 fi
