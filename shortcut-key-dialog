@@ -5,11 +5,17 @@
 
 #An accessible (to screen readers) dialog with currently defined ratpoison keyboard shortcuts.
 
+escapeKey="$(grep "^escape" "$HOME/.ratpoisonrc")"
+if [ -z "$escapeKey" ]; then
+escapeKey="C-t"
+else
+escapeKey="$(echo "$escapeKey" | cut -d " " -f2)"
+fi
 ifs="$IFS"
 IFS=$'\t'
-keyList="$(cat "$HOME/.ratpoisonrc" | grep -vi "unbind\|startup_message")"
+keyList="$(grep -vi "^#\|^unbind\|^startup_message" "$HOME/.ratpoisonrc")"
 #format the keyList variable.
-keyList="$(echo -e "$keyList" | sed -e 's/^\(bind[ \t]*\)\([a-zA-Z0-9[:punct:]]*\)[ \t]\(.*\)/c-t \2\t\3\t/' -e '/^exec/d' | tr -s "[:space:]")"
+keyList="$(echo -e "$keyList" | sed -e "s/^\(bind[ \t]*\)\([a-zA-Z0-9[:punct:]]*\)[ \t]\(.*\)/$escapeKey \2\t\3\t/" -e '/^exec/d' | tr -s "[:space:]")"
 #create keyboard shortcuts dialog.
 zenity --list --title "Ratpoison Keyboard Shortcuts" --ok-label Close --print-column all --column "Key" --column "Action" -- -- $keyList
 IFS="$ifs"
