@@ -42,6 +42,31 @@ done
 eval $__get_input_input="'$__get_input_answer'"
 }
 
+write_xinitrc()
+{
+if [ -f "$HOME/.xinitrc" ]; then
+get_input continue "This will overwrite your existing $HOME/.xinitrc file. Do you want to continue?" yes no
+if [ "$continue" = "no" ]; then
+exit 0
+fi
+fi
+echo '#!/bin/sh
+#
+# ~/.xinitrc
+#
+# Executed by startx (run your window manager from here)
+
+if [ -d /etc/X11/xinit/xinitrc.d ]; then
+  for f in /etc/X11/xinit/xinitrc.d/*; do
+    [ -x "$f" ] && . "$f"
+  done
+  unset f
+fi
+export GTK_MODULES=gail:atk-bridge
+
+exec ratpoison' > $HOME/.xinitrc
+}
+
 add_setting()
 {
 if [ -z "$rc" ]; then
@@ -107,6 +132,11 @@ add_setting 'bind F12 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/u
 esac
 }
 
+# Create .xinitrc file if requested
+if [[ "$1" = "-x" || "$1" = "--xinitrc" ]]; then
+write_xinitrc
+exit 0
+fi
 # Make sure rc variable is empty
 unset rc
 # Set  path for helper scripts.
