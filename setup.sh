@@ -219,6 +219,16 @@ if [ -n "$webBrowser" ]; then
 webBrowser="/usr/bin/$webBrowser"
 fi
 add_setting bind w exec $webBrowser
+add_setting bind u exec $webBrowser '$(ratpoison -c getsel) # Open selected URI in web browser' 
+if hash mumble &> /dev/null ; then
+add_setting m exec /usr/bin/mumble
+fi
+if hash skype &> /dev/null ; then
+add_setting bind C-F1 exec skype skype:?hangup
+add_setting bind C-F2 exec skype skype:?answercall
+add_setting bind C-F3 exec skype skype:?ignorecall
+add_setting bind C-F4 exec skype skype:
+fi
 add_setting bind c exec /usr/bin/$terminal
 add_setting bind O exec /usr/bin/orca -r
 
@@ -231,8 +241,12 @@ add_setting exec /usr/bin/rpws init $workspaces -k
 fi
 fi
 # Additional startup programs
+programList="/usr/bin/orca "
+if hash glipper &> /dev/null ; then
+programList="${programList}/usr/bin/glipper "
+fi
 echo "Enter any programs you want started automatically separated by spaces:"
-read -e -i "/usr/bin/orca " programs
+read -e -i "$programList" programs
 if [ -n "$programs" ]; then
 for i in $programs ; do
 if hash ${i##*/} &> /dev/null ; then
