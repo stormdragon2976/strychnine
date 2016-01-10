@@ -221,7 +221,7 @@ fi
 add_setting bind w exec $webBrowser
 add_setting bind u exec $webBrowser '$(ratpoison -c getsel) # Open selected URI in web browser' 
 if hash mumble &> /dev/null ; then
-add_setting m exec /usr/bin/mumble
+add_setting bind m exec /usr/bin/mumble
 fi
 if hash skype &> /dev/null ; then
 add_setting bind C-F1 exec skype skype:?hangup
