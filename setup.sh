@@ -67,6 +67,25 @@ export GTK_MODULES=gail:atk-bridge
 exec ratpoison' > $HOME/.xinitrc
 }
 
+install_default_programs()
+{
+programList=""
+for i in lxterminal pcmanfm seamonkey xmms2 ; do
+if ! hash $i &> /dev/null ; then
+programList="${programList}$i "
+fi
+done
+# Get install command for packages
+# I'm not sure how to do all of these, so if yours is missing please add it
+if hash pacman &> /dev/null ; then
+installCommand="pacman -S"
+fi
+if hash apt-get &> /dev/null ; then
+installCommand="apt-get install"
+fi
+sudo $installCommand $programList
+}
+
 add_setting()
 {
 if [ -z "$rc" ]; then
@@ -132,6 +151,11 @@ add_setting 'bind F12 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/u
 esac
 }
 
+# Install default programs if requested
+if [[ "$1" = "-i" || "$1" = "--install" ]]; then
+install_default_programs
+exit 0
+fi
 # Create .xinitrc file if requested
 if [[ "$1" = "-x" || "$1" = "--xinitrc" ]]; then
 write_xinitrc
@@ -210,7 +234,7 @@ fi
 set_music_keybindings $musicPlayer
 # Configure file browser
 unset programList
-for i in -caja nemo pcmanfm ; do
+for i in caja nemo -pcmanfm ; do
 if hash ${i/#-/} &> /dev/null ; then
 if [ -n "$programList" ]; then
 programList="$programList $i"
@@ -230,7 +254,7 @@ fi
 add_setting bind f exec $fileBrowser
 # Configure web browser
 unset programList
-for i in epiphany firefox midori -seamonkey ; do
+for i in chromium epiphany firefox midori -seamonkey ; do
 if hash ${i/#-/} &> /dev/null ; then
 if [ -n "$programList" ]; then
 programList="$programList $i"
