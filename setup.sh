@@ -182,6 +182,7 @@ add_setting $'\n'"# Unbind section"
 add_setting unbind c
 add_setting unbind C-c
 add_setting unbind C-exclam
+add_setting unbind C-t
 add_setting unbind exclam
 add_setting unbind question
 get_input escapeKey "Enter desired escape key:" C-t C-z -C-Escape C-space Super_L Super_R
@@ -316,6 +317,7 @@ fi
 add_setting bind c exec /usr/bin/$terminal
 add_setting bind C-c exec /usr/bin/$terminal
 add_setting 'bind C-exclam exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
+add_setting bind C-t exec zenity --info --timeout 5 --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
 add_setting bind O exec /usr/bin/orca -r
 
 # Autostart section
