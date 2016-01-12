@@ -180,6 +180,8 @@ add_setting set waitcursor 45
 # Unbind existing keys that lead to inaccessible things like xterm or keys that user wants to change:
 add_setting $'\n'"# Unbind section"
 add_setting unbind c
+add_setting unbind C-c
+add_setting unbind question
 get_input escapeKey "Enter desired escape key:" C-t C-z -C-Escape C-space Super_L Super_R
 if [ "$escapeKey" != "C-t" ]; then
 add_setting unbind t
@@ -194,8 +196,9 @@ fi
 add_setting "# Alt+tab switches through open windows"
 add_setting definekey top M-Tab next
 add_setting definekey top M-ISO_Left_Tab prev
-add_setting definekey top F1 exec ${path}/shortcut-key-dialog '# show existing shortcuts'
+add_setting definekey top F1 exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
 add_setting definekey top M-F2 exec ${path}/run-dialog '# accessible run dialog'
+add_setting bind question exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
 # Figure out which terminal emulator to use:
 unset programList
 for i in gnome-terminal mate-terminal -lxterminal ; do
@@ -309,6 +312,7 @@ add_setting bind C-F3 exec skype skype:?ignorecall
 add_setting bind C-F4 exec skype skype:
 fi
 add_setting bind c exec /usr/bin/$terminal
+add_setting bind C-c exec /usr/bin/$terminal
 add_setting bind O exec /usr/bin/orca -r
 
 # Autostart section
