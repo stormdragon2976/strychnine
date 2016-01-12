@@ -287,7 +287,7 @@ add_setting bind O exec /usr/bin/orca -r
 
 # Autostart section
 add_setting $'\n'"# Autostart section"
-if hash rpws ; then
+if hash rpws &> /dev/null ; then
 get_input workspaces "Select desired number of workspaces:" {1..3} -4 {5..8}
 if [ $workspaces -gt 1 ]; then
 add_setting exec /usr/bin/rpws init $workspaces -k
