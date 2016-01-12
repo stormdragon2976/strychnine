@@ -149,6 +149,9 @@ add_setting "bind B exec ${musicPlayer} next # next track"
 add_setting 'bind F11 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
 add_setting 'bind F12 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") + 10)) # increase volume'
 esac
+if hash gasher &> /dev/null ; then
+add_setting bind G exec gasher -M '# Submit currently playing song to GNU Social'
+fi
 }
 
 # Install default programs if requested
@@ -273,6 +276,29 @@ webBrowser="/usr/bin/$webBrowser"
 fi
 add_setting bind w exec $webBrowser
 add_setting bind u exec $webBrowser '$(ratpoison -c getsel) # Open selected URI in web browser' 
+# Configure text editor
+unset programList
+for i in gedit -leafpad mousepad pluma ; do
+if hash ${i/#-/} &> /dev/null ; then
+if [ -n "$programList" ]; then
+programList="$programList $i"
+else
+programList="$i"
+fi
+fi
+done
+if [ "$programList" != "${programList// /}" ]; then
+get_input textEditor "Please select a text editor:" $programList
+else
+textEditor="${programList/#-/}"
+fi
+if [ -n "$textEditor" ]; then
+textEditor="/usr/bin/$textEditor"
+fi
+add_setting bind e exec $textEditor
+if hash gasher &> /dev/null ; then
+add_setting bind g exec EDITOR="$textEditor" gasher -p  '# Post to GNU Social with Gasher'
+fi
 if hash mumble &> /dev/null ; then
 add_setting bind m exec /usr/bin/mumble
 fi
