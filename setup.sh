@@ -176,7 +176,8 @@ add_setting set winname title
 add_setting "set bgcolor #000000"
 add_setting "set fgcolor #FFFFFF"
 add_setting 'set font -*-terminus-medium-r-normal-*-24-*-*-*-*-*-*-*'
-add_setting set waitcursor 45
+add_setting set waitcursor 1
+add_setting banish
 
 # Unbind existing keys that lead to inaccessible things like xterm or keys that user wants to change:
 add_setting $'\n'"# Unbind section"
@@ -188,6 +189,7 @@ add_setting unbind exclam
 add_setting unbind question
 add_setting unbind C-apostrophe
 add_setting unbind apostrophe
+add_setting unbind colon
 get_input escapeKey "Enter desired escape key:" C-t C-z -C-Escape C-space Super_L Super_R
 if [ "$escapeKey" != "C-t" ]; then
 add_setting unbind t
@@ -324,6 +326,8 @@ add_setting bind C-t exec zenity --info --timeout $timeOut --ok-label '"Close"' 
 add_setting bind O exec /usr/bin/orca -r
 add_setting bind C-apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
 add_setting bind apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
+add_setting bind colon exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
+add_setting bind C-colon exec ratpoison -c "source $HOME/.ratpoisonrc"
 
 # Autostart section
 add_setting $'\n'"# Autostart section"
