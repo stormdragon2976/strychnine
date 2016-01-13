@@ -184,6 +184,8 @@ add_setting $'\n'"# Unbind section"
 add_setting unbind c
 add_setting unbind C-c
 add_setting unbind C-t
+add_setting unbind C-v
+add_setting unbind v
 add_setting unbind C-exclam
 add_setting unbind exclam
 add_setting unbind question
@@ -324,6 +326,8 @@ add_setting bind C-c exec /usr/bin/$terminal
 add_setting 'bind C-exclam exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
 add_setting bind C-t exec zenity --info --timeout $timeOut --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
 add_setting bind O exec /usr/bin/orca -r
+add_setting bind C-v exec zenity --info --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
+add_setting bind v exec zenity --info --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
 add_setting bind C-apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
 add_setting bind apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
 add_setting bind colon exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
