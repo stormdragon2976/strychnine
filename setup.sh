@@ -331,7 +331,7 @@ add_setting bind v exec zenity --info --timeout $timeOut '--title "Ratpoison" --
 add_setting bind C-apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
 add_setting bind apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
 add_setting bind colon exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
-add_setting bind C-colon exec ratpoison -c "source $HOME/.ratpoisonrc"
+add_setting bind C-colon exec ratpoison -c "\"source $HOME/.ratpoisonrc\""
 
 # Autostart section
 add_setting $'\n'"# Autostart section"
