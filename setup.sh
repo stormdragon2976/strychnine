@@ -181,6 +181,10 @@ add_setting banish
 
 # Unbind existing keys that lead to inaccessible things like xterm or keys that user wants to change:
 add_setting $'\n'"# Unbind section"
+add_setting unbind C-A
+add_setting unbind A
+add_setting unbind C-a
+add_setting unbind a
 add_setting unbind c
 add_setting unbind C-c
 add_setting unbind C-t
@@ -291,7 +295,7 @@ add_setting bind w exec $webBrowser
 add_setting bind u exec $webBrowser '$(ratpoison -c getsel) # Open selected URI in web browser' 
 # Configure text editor
 unset programList
-for i in gedit -leafpad mousepad pluma ; do
+for i in gedit -leafpad libreoffice mousepad pluma ; do
 if hash ${i/#-/} &> /dev/null ; then
 if [ -n "$programList" ]; then
 programList="$programList $i"
@@ -324,10 +328,14 @@ fi
 add_setting bind c exec /usr/bin/$terminal
 add_setting bind C-c exec /usr/bin/$terminal
 add_setting 'bind C-exclam exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
+add_setting bind C-A exec 't="$(zenity --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
+add_setting bind A exec 't="$(zenity --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
+add_setting bind C-a exec zenity --info --timeout $timeOut --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
+add_setting bind a exec zenity --info --timeout $timeOut --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
 add_setting bind C-t exec zenity --info --timeout $timeOut --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
 add_setting bind O exec /usr/bin/orca -r
-add_setting bind C-v exec zenity --info --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
-add_setting bind v exec zenity --info --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
+add_setting bind C-v exec zenity --info --ok-label '"Close"' --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
+add_setting bind v exec zenity --info --ok-label '"Close"' --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
 add_setting bind C-apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
 add_setting bind apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
 add_setting bind colon exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
