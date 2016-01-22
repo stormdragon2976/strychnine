@@ -86,6 +86,15 @@ fi
 sudo $installCommand $programList
 }
 
+add_alias()
+{
+if [ -z "$rpAlias" ]; then
+rpAlias="$@"
+else
+rpAlias="${rpAlias}"$'\n'"$@"
+fi
+}
+
 add_setting()
 {
 if [ -z "$rc" ]; then
@@ -101,57 +110,64 @@ set_music_keybindings()
 add_setting "# Music player bindings:"
 case "${1##*/}" in
 "cmus")
-add_setting "bind Z exec ${musicPlayer}-remote -r # previous track"
-add_setting "bind X exec ${musicPlayer}-remote -p # play"
-add_setting "bind C exec ${musicPlayer}-remote -u # pause"
-add_setting "bind V exec ${musicPlayer}-remote -s # stop"
-add_setting "bind B exec ${musicPlayer}-remote -n # next track"
-add_setting "bind F11 exec ${musicPlayer}-remote -v -10% # decrease volume"
-add_setting "bind F12 exec ${musicPlayer}-remote -v +10% # increase volume"
+add_alias "alias music_player_previous_track exec ${musicPlayer}-remote -r # previous track"
+add_alias "alias music_player_play exec ${musicPlayer}-remote -p # play"
+add_alias "alias music_player_pause exec ${musicPlayer}-remote -u # pause"
+add_alias "alias music_player_stop exec ${musicPlayer}-remote -s # stop"
+add_alias "alias music_player_next_track exec ${musicPlayer}-remote -n # next track"
+add_alias "alias music_player_decrease_volume exec ${musicPlayer}-remote -v -10% # decrease volume"
+add_alias "alias music_player_increase_volumeF12 exec ${musicPlayer}-remote -v +10% # increase volume"
 ;;
 "moc")
-add_setting "bind Z exec ${musicPlayer} -r # previous track"
-add_setting "bind X exec ${musicPlayer} -p # play"
-add_setting "bind C exec ${musicPlayer} -G # pause"
-add_setting "bind V exec ${musicPlayer} -s # stop"
-add_setting "bind B exec ${musicPlayer} -f # next track"
-add_setting "bind F11 exec ${musicPlayer} -v -10 # decrease volume"
-add_setting "bind F12 exec ${musicPlayer} -v +10 # increase volume"
+add_alias "alias music_player_previous_track exec ${musicPlayer} -r # previous track"
+add_alias "alias music_player_play exec ${musicPlayer} -p # play"
+add_alias "alias music_player_pause exec ${musicPlayer} -G # pause"
+add_alias "alias music_player_stop exec ${musicPlayer} -s # stop"
+add_alias "alias music_player_next_track exec ${musicPlayer} -f # next track"
+add_alias "alias music_player_decrease_volumeF11 exec ${musicPlayer} -v -10 # decrease volume"
+add_alias "alias music_player_increase_volumeF12 exec ${musicPlayer} -v +10 # increase volume"
 ;;
 "mpc")
-add_setting "bind Z exec ${musicPlayer} -q prev # previous track"
-add_setting "bind X exec ${musicPlayer} -q play # play"
-add_setting "bind C exec ${musicPlayer} -q pause # pause"
-add_setting "bind V exec ${musicPlayer} -q stop # stop"
-add_setting "bind B exec ${musicPlayer} -q next # next track"
-add_setting "bind F11 exec ${musicPlayer} -q volume -10 # decrease volume"
-add_setting "bind F12 exec ${musicPlayer} -q volume +10 # increase volume"
+add_alias "alias music_player_previous_track exec ${musicPlayer} -q prev # previous track"
+add_alias "alias music_player_play exec ${musicPlayer} -q play # play"
+add_alias "alias music_player_pause exec ${musicPlayer} -q pause # pause"
+add_alias "alias music_player_stop exec ${musicPlayer} -q stop # stop"
+add_alias "alias music_player_next_track exec ${musicPlayer} -q next # next track"
+add_alias "alias music_player_decrease_volumeF11 exec ${musicPlayer} -q volume -10 # decrease volume"
+add_alias "alias music_player_increase_volumeF12 exec ${musicPlayer} -q volume +10 # increase volume"
 ;;
 "pianobar")
 add_setting "# Pianobar requires a fifo file for its keybindings to work"'\n'"# To create this file, do the following:"'$\n'"# mkfifo $xdgPath/pianobar/ctl"
 add_setting "# There is no previous track binding for Pianobar"
-add_setting "bind X exec echo -n 'P' > $xdgPath/pianobar/ctl # play"
-add_setting "bind C exec echo -n 'p' > $xdgPath/pianobar/ctl # pause"
-add_setting "bind V exec echo -n 'S' > $xdgPath/pianobar/ctl # stop"
-add_setting "bind B exec echo -n 'n' > $xdgPath/pianobar/ctl # next track"
-add_setting "bind F11 exec echo -n '(' > $xdgPath/pianobar/ctl # decrease volume"
-add_setting "bind F12 exec echo -n ')' > $xdgPath/pianobar/ctl # increase volume"
+add_alias "alias music_player_play exec echo -n 'P' > $xdgPath/pianobar/ctl # play"
+add_alias "alias music_player_pause exec echo -n 'p' > $xdgPath/pianobar/ctl # pause"
+add_alias "alias music_player_stop exec echo -n 'S' > $xdgPath/pianobar/ctl # stop"
+add_alias "alias music_player_next_track exec echo -n 'n' > $xdgPath/pianobar/ctl # next track"
+add_alias "alias music_player_decrease_volumeF11 exec echo -n '(' > $xdgPath/pianobar/ctl # decrease volume"
+add_alias "alias music_player_increase_volumeF12 exec echo -n ')' > $xdgPath/pianobar/ctl # increase volume"
 ;;
 "xmms2")
 # Insure volume keys will work:
 ${musicPlayer} server config effect.order.0 equalizer
 ${musicPlayer} server config equalizer.enabled 1
-add_setting "bind Z exec ${musicPlayer} prev # previous track"
-add_setting "bind X exec ${musicPlayer} play # play"
-add_setting "bind C exec ${musicPlayer} toggle # pause"
-add_setting "bind V exec ${musicPlayer} stop # stop"
-add_setting "bind B exec ${musicPlayer} next # next track"
-add_setting 'bind F11 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
-add_setting 'bind F12 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") + 10)) # increase volume'
+add_alias "alias music_player_previous_track exec ${musicPlayer} prev # previous track"
+add_alias "alias music_player_play exec ${musicPlayer} play # play"
+add_alias "alias music_player_pause exec ${musicPlayer} toggle # pause"
+add_alias "alias music_player_stop exec ${musicPlayer} stop # stop"
+add_alias "alias music_player_next_track exec ${musicPlayer} next # next track"
+add_alias "alias music_player_decrease_volumeF11 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
+add_alias "alias music_player_increase_volumeF12 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") + 10)) # increase volume'
 esac
 if hash gasher &> /dev/null ; then
 add_setting bind G exec gasher -M '# Submit currently playing song to GNU Social'
 fi
+add_setting "bind M-z music_player_previous_track"
+add_setting "bind M-x music_player_play"
+add_setting "bind M-c music_player_pause"
+add_setting "bind M-v music_player_stop"
+add_setting "bind M-b music_player_next_track"
+add_setting "bind M-minus music_player_decrease_volume"
+add_setting "bind M-equals music_player_increase_volume"
 }
 
 # Install default programs if requested
@@ -211,8 +227,9 @@ add_setting "# Alt+tab switches through open windows"
 add_setting definekey top M-Tab next
 add_setting definekey top M-ISO_Left_Tab prev
 add_setting definekey top F1 exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
-add_setting bind exclam exec ${path}/run-dialog '# accessible run dialog'
-add_setting bind question exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
+add_setting bind exclam run_dialog
+add_alias alias ratpoison_keybindings exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
+add_setting bind question ratpoison_keybindings
 # Figure out which terminal emulator to use:
 unset programList
 for i in gnome-terminal mate-terminal -lxterminal ; do
@@ -292,7 +309,7 @@ if [ -n "$webBrowser" ]; then
 webBrowser="/usr/bin/$webBrowser"
 fi
 add_setting bind w exec $webBrowser
-add_setting bind u exec $webBrowser '$(ratpoison -c getsel) # Open selected URI in web browser' 
+add_setting bind W exec $webBrowser '$(ratpoison -c getsel) # Open selected URI in web browser' 
 # Configure text editor
 unset programList
 for i in gedit -leafpad libreoffice mousepad pluma ; do
@@ -327,18 +344,24 @@ add_setting bind C-F4 exec skype skype:
 fi
 add_setting bind c exec /usr/bin/$terminal
 add_setting bind C-c exec /usr/bin/$terminal
-add_setting 'bind C-exclam exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
-add_setting bind C-A exec 't="$(zenity --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
-add_setting bind A exec 't="$(zenity --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
-add_setting bind C-a exec zenity --info --timeout $timeOut --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
-add_setting bind a exec zenity --info --timeout $timeOut --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
-add_setting bind C-t exec zenity --info --timeout $timeOut --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
-add_setting bind O exec /usr/bin/orca -r
-add_setting bind C-v exec zenity --info --ok-label '"Close"' --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
-add_setting bind v exec zenity --info --ok-label '"Close"' --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
-add_setting bind C-apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
-add_setting bind apostrophe exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
-add_setting bind colon exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
+add_alias 'alias run_dialog exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
+add_setting bind C-exclam run_dialog
+add_alias alias set_window_name exec 't="$(zenity --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
+add_setting bind C-A set_window_name
+add_setting bind A set_window_name
+add_alias alias show_date exec zenity --info --timeout $timeOut --ok-label '"Close"' --title '"Ratpoison"' --text '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
+add_setting bind C-a show_date
+add_setting bind a show_date
+add_setting bind C-t show_date
+add_setting bind O exec /usr/bin/orca -r '# Restart Orca'
+add_alias alias ratpoison_version exec zenity --info --ok-label '"Close"' --timeout $timeOut '--title "Ratpoison" --text "$(ratpoison -c "version")"'
+add_setting bind C-v ratpoison_version
+add_setting bind v ratpoison_version
+add_alias alias window_menu exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
+add_setting bind C-apostrophe window_menu
+add_setting bind apostrophe window_menu
+add_alias alias run_ratpoison_command exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
+add_setting bind colon run_ratpoison_command
 add_setting bind C-colon exec ratpoison -c "\"source $HOME/.ratpoisonrc\""
 
 # Autostart section
@@ -372,4 +395,7 @@ exit 0
 fi
 fi
 echo "$rc" > $HOME/.ratpoisonrc
+echo >> $HOME/.ratpoisonrc
+echo "# Alias Section">> $HOME/.ratpoisonrc
+echo "$rpAlias" >> $HOME/.ratpoisonrc
 exit 0
