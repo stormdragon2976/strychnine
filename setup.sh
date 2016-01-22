@@ -116,7 +116,7 @@ add_alias "alias music_player_pause exec ${musicPlayer}-remote -u # pause"
 add_alias "alias music_player_stop exec ${musicPlayer}-remote -s # stop"
 add_alias "alias music_player_next_track exec ${musicPlayer}-remote -n # next track"
 add_alias "alias music_player_decrease_volume exec ${musicPlayer}-remote -v -10% # decrease volume"
-add_alias "alias music_player_increase_volumeF12 exec ${musicPlayer}-remote -v +10% # increase volume"
+add_alias "alias music_player_increase_volume exec ${musicPlayer}-remote -v +10% # increase volume"
 ;;
 "moc")
 add_alias "alias music_player_previous_track exec ${musicPlayer} -r # previous track"
@@ -124,8 +124,8 @@ add_alias "alias music_player_play exec ${musicPlayer} -p # play"
 add_alias "alias music_player_pause exec ${musicPlayer} -G # pause"
 add_alias "alias music_player_stop exec ${musicPlayer} -s # stop"
 add_alias "alias music_player_next_track exec ${musicPlayer} -f # next track"
-add_alias "alias music_player_decrease_volumeF11 exec ${musicPlayer} -v -10 # decrease volume"
-add_alias "alias music_player_increase_volumeF12 exec ${musicPlayer} -v +10 # increase volume"
+add_alias "alias music_player_decrease_volume exec ${musicPlayer} -v -10 # decrease volume"
+add_alias "alias music_player_increase_volume exec ${musicPlayer} -v +10 # increase volume"
 ;;
 "mpc")
 add_alias "alias music_player_previous_track exec ${musicPlayer} -q prev # previous track"
@@ -133,8 +133,8 @@ add_alias "alias music_player_play exec ${musicPlayer} -q play # play"
 add_alias "alias music_player_pause exec ${musicPlayer} -q pause # pause"
 add_alias "alias music_player_stop exec ${musicPlayer} -q stop # stop"
 add_alias "alias music_player_next_track exec ${musicPlayer} -q next # next track"
-add_alias "alias music_player_decrease_volumeF11 exec ${musicPlayer} -q volume -10 # decrease volume"
-add_alias "alias music_player_increase_volumeF12 exec ${musicPlayer} -q volume +10 # increase volume"
+add_alias "alias music_player_decrease_volume exec ${musicPlayer} -q volume -10 # decrease volume"
+add_alias "alias music_player_increase_volume exec ${musicPlayer} -q volume +10 # increase volume"
 ;;
 "pianobar")
 add_setting "# Pianobar requires a fifo file for its keybindings to work"'\n'"# To create this file, do the following:"'$\n'"# mkfifo $xdgPath/pianobar/ctl"
@@ -143,20 +143,20 @@ add_alias "alias music_player_play exec echo -n 'P' > $xdgPath/pianobar/ctl # pl
 add_alias "alias music_player_pause exec echo -n 'p' > $xdgPath/pianobar/ctl # pause"
 add_alias "alias music_player_stop exec echo -n 'S' > $xdgPath/pianobar/ctl # stop"
 add_alias "alias music_player_next_track exec echo -n 'n' > $xdgPath/pianobar/ctl # next track"
-add_alias "alias music_player_decrease_volumeF11 exec echo -n '(' > $xdgPath/pianobar/ctl # decrease volume"
-add_alias "alias music_player_increase_volumeF12 exec echo -n ')' > $xdgPath/pianobar/ctl # increase volume"
+add_alias "alias music_player_decrease_volume exec echo -n '(' > $xdgPath/pianobar/ctl # decrease volume"
+add_alias "alias music_player_increase_volume exec echo -n ')' > $xdgPath/pianobar/ctl # increase volume"
 ;;
 "xmms2")
 # Insure volume keys will work:
 ${musicPlayer} server config effect.order.0 equalizer
 ${musicPlayer} server config equalizer.enabled 1
-add_alias "alias music_player_previous_track exec ${musicPlayer} prev # previous track"
-add_alias "alias music_player_play exec ${musicPlayer} play # play"
-add_alias "alias music_player_pause exec ${musicPlayer} toggle # pause"
+add_alias "alias music_player_previous_track exec ${musicPlayer} prev && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"\$(${musicPlayer} current)\" # previous track"
+add_alias "alias music_player_play exec ${musicPlayer} play && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"\$(${musicPlayer} current)\" # play"
+add_alias "alias music_player_pause exec ${musicPlayer} toggle && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"$(${musicPlayer} current)\" # pause"
 add_alias "alias music_player_stop exec ${musicPlayer} stop # stop"
-add_alias "alias music_player_next_track exec ${musicPlayer} next # next track"
-add_alias "alias music_player_decrease_volumeF11 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
-add_alias "alias music_player_increase_volumeF12 exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") + 10)) # increase volume'
+add_alias "alias music_player_next_track exec ${musicPlayer} next && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"\$(${musicPlayer} current)\" # next track"
+add_alias "alias music_player_decrease_volume exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
+add_alias "alias music_player_increase_volume exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") + 10)) # increase volume'
 esac
 if hash gasher &> /dev/null ; then
 add_setting bind G exec gasher -M '# Submit currently playing song to GNU Social'
