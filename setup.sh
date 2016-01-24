@@ -226,7 +226,9 @@ fi
 add_setting "# Alt+tab switches through open windows"
 add_setting definekey top M-Tab next
 add_setting definekey top M-ISO_Left_Tab prev
-add_setting definekey top F1 exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
+if hash ocrdesktop &> /dev/null ; then
+add_setting definekey top Print exec /usr/bin/ocrdesktop
+fi
 add_setting bind exclam run_dialog
 add_alias alias ratpoison_keybindings exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
 add_setting bind question ratpoison_keybindings
