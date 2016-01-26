@@ -155,8 +155,8 @@ add_alias "alias music_player_play exec ${musicPlayer} play && sleep 0.75 && zen
 add_alias "alias music_player_pause exec ${musicPlayer} toggle && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"$(${musicPlayer} current)\" # pause"
 add_alias "alias music_player_stop exec ${musicPlayer} stop # stop"
 add_alias "alias music_player_next_track exec ${musicPlayer} next && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"\$(${musicPlayer} current)\" # next track"
-add_alias "alias music_player_decrease_volume exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
-add_alias "alias music_player_increase_volume exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") + 10)) # increase volume'
+add_alias 'alias music_player_decrease_volume exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
+add_alias 'alias music_player_increase_volume exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") + 10)) # increase volume'
 esac
 if hash gasher &> /dev/null ; then
 add_setting bind G exec gasher -M '# Submit currently playing song to GNU Social'
@@ -167,7 +167,7 @@ add_setting "bind M-c music_player_pause"
 add_setting "bind M-v music_player_stop"
 add_setting "bind M-b music_player_next_track"
 add_setting "bind M-minus music_player_decrease_volume"
-add_setting "bind M-equals music_player_increase_volume"
+add_setting "bind M-equal music_player_increase_volume"
 }
 
 # Install default programs if requested
