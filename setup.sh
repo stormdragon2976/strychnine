@@ -344,6 +344,9 @@ add_setting bind C-F2 exec skype skype:?answercall
 add_setting bind C-F3 exec skype skype:?ignorecall
 add_setting bind C-F4 exec skype skype:
 fi
+if command -v talking-clock &> /dev/null ; then
+add_setting bind M-t exec $(command -v talking-clock) '-c'
+fi
 add_setting bind c exec /usr/bin/$terminal
 add_setting bind C-c exec /usr/bin/$terminal
 add_alias 'alias run_dialog exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
@@ -365,6 +368,8 @@ add_setting bind apostrophe window_menu
 add_alias alias run_ratpoison_command exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
 add_setting bind colon run_ratpoison_command
 add_setting bind C-colon exec ratpoison -c "\"source $HOME/.ratpoisonrc\""
+add_setting bind C-M-r restart
+add_setting bind C-M-q quit
 
 # Autostart section
 add_setting $'\n'"# Autostart section"
