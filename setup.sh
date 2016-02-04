@@ -152,7 +152,7 @@ ${musicPlayer} server config effect.order.0 equalizer
 ${musicPlayer} server config equalizer.enabled 1
 add_alias "alias music_player_previous_track exec ${musicPlayer} prev && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"\$(${musicPlayer} current)\" # previous track"
 add_alias "alias music_player_play exec ${musicPlayer} play && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"\$(${musicPlayer} current)\" # play"
-add_alias "alias music_player_pause exec ${musicPlayer} toggle && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"$(${musicPlayer} current)\" # pause"
+add_alias "alias music_player_pause exec ${musicPlayer} toggle && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"\$(${musicPlayer} current)\" # pause"
 add_alias "alias music_player_stop exec ${musicPlayer} stop # stop"
 add_alias "alias music_player_next_track exec ${musicPlayer} next && sleep 0.75 && zenity --info --timeout $timeOut --title 'Ratpoison' --text \"\$(${musicPlayer} current)\" # next track"
 add_alias 'alias music_player_decrease_volume exec /usr/bin/xmms2 server config equalizer.preamp $(($(/usr/bin/xmms2 server config equalizer.preamp | tr -Cd "[:digit:]-") - 10)) # decrease volume'
@@ -226,8 +226,8 @@ fi
 add_setting "# Alt+tab switches through open windows"
 add_setting definekey top M-Tab next
 add_setting definekey top M-ISO_Left_Tab prev
-if hash ocrdesktop &> /dev/null ; then
-add_setting definekey top Print exec /usr/bin/ocrdesktop
+if command -v ocrdesktop &> /dev/null ; then
+add_setting definekey top Print exec $(command -v ocrdesktop) -d
 fi
 add_setting bind exclam run_dialog
 add_alias alias ratpoison_keybindings exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
