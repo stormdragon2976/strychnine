@@ -374,22 +374,27 @@ add_setting bind C-M-q quit
 # Autostart section
 add_setting $'\n'"# Autostart section"
 if hash rpws &> /dev/null ; then
-get_input workspaces "Select desired number of workspaces:" {1..3} -4 {5..8}
+get_input workspaces "Select desired number of workspaces:" -1 {2..8}
 if [ $workspaces -gt 1 ]; then
 add_setting exec /usr/bin/rpws init $workspaces -k
 fi
 fi
 # Additional startup programs
 programList="/usr/bin/orca "
-if hash glipper &> /dev/null ; then
+if command -v glipper &> /dev/null ; then
 programList="${programList}/usr/bin/glipper "
 fi
-echo "Enter any programs you want started automatically separated by spaces:"
+if [ $workspaces -eq 1 ]; then
+if [ "${fileBrowser##*/}" = "pcmanfm" ]; then
+programList="${programList}${fileBrowser}%20--desktop"
+fi
+fi
+echo "Enter any programs you want started automatically separated by spaces (If your program requires a space, type %20):" | fold -s -w $(tput cols)
 read -e -i "$programList" programs
 if [ -n "$programs" ]; then
 for i in $programs ; do
-if hash ${i##*/} &> /dev/null ; then
-add_setting exec $i
+if command -v $(echo "${i##*/}" | sed 's/%20.*//') &> /dev/null ; then
+add_setting exec ${i//\%20/ }
 else
 echo "$i was not found."
 fi
