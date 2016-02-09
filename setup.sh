@@ -385,6 +385,9 @@ if command -v glipper &> /dev/null ; then
 programList="${programList}/usr/bin/glipper "
 fi
 if [ $workspaces -eq 1 ]; then
+if [ "${fileBrowser##*/}" = "nemo" ]; then
+programList="${programList}${fileBrowser}%20-n"
+fi
 if [ "${fileBrowser##*/}" = "pcmanfm" ]; then
 programList="${programList}${fileBrowser}%20--desktop"
 fi
