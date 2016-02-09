@@ -273,7 +273,7 @@ fi
 set_music_keybindings $musicPlayer
 # Configure file browser
 unset programList
-for i in caja nemo -pcmanfm ; do
+for i in caja nemo nautilus -pcmanfm ; do
 if hash ${i/#-/} &> /dev/null ; then
 if [ -n "$programList" ]; then
 programList="$programList $i"
@@ -288,7 +288,7 @@ else
 fileBrowser="${programList/#-/}"
 fi
 if [ -n "$fileBrowser" ]; then
-fileBrowser="/usr/bin/$fileBrowser"
+fileBrowser="$(command -v $fileBrowser)"
 fi
 add_setting bind f exec $fileBrowser
 # Configure web browser
@@ -308,7 +308,7 @@ else
 webBrowser="${programList/#-/}"
 fi
 if [ -n "$webBrowser" ]; then
-webBrowser="/usr/bin/$webBrowser"
+webBrowser="$(command -v $webBrowser)"
 fi
 add_setting bind w exec $webBrowser
 add_setting bind W exec $webBrowser '$(ratpoison -c getsel) # Open selected URI in web browser' 
