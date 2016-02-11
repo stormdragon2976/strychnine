@@ -112,11 +112,11 @@ set_music_keybindings()
 add_setting "# Music player bindings:"
 case "${1##*/}" in
 "cmus")
-add_alias "alias music_player_previous_track exec ${musicPlayer}-remote -r # previous track"
-add_alias "alias music_player_play exec ${musicPlayer}-remote -p # play"
+add_alias "alias music_player_previous_track exec ${musicPlayer}-remote -r && zenity --info --timeout $timeOut --title 'Ratpoison' $text \"\$(${musicPlayer}-remote -Q | head -n2 | tail -n1 | sed -e \"s#^file $HOME/##\" -e 's/^music\|media\///i' -e's#/# - #g' -e 's/\(.+\)\(\.\w+\)/\1/')\" # previous track"
+add_alias "alias music_player_play exec ${musicPlayer}-remote -p && zenity --info --timeout $timeOut --title'Ratpoison' $text \"\$(${musicPlayer}-remote -Q | head -n2 | tail -n1 | sed -e \"s#^file $HOME/##\" -e 's/^music\|media\///i' -e 's#/# - #g' -e 's/\(.+\)\(\.\w+\)/\1/')\" # play"
 add_alias "alias music_player_pause exec ${musicPlayer}-remote -u # pause"
 add_alias "alias music_player_stop exec ${musicPlayer}-remote -s # stop"
-add_alias "alias music_player_next_track exec ${musicPlayer}-remote -n # next track"
+add_alias "alias music_player_next_track exec ${musicPlayer}-remote -n && zenity --info --timeout $timeOut --title'Ratpoison' $text \"\$(${musicPlayer}-remote -Q | head -n2 | tail -n1 | sed -e \"s#^file $HOME/##\" -e 's/^music\|media\///i' -e 's#/# - #g' -e 's/\(.+\)\(\.\w+\)/\1/')\" # next track"
 add_alias "alias music_player_decrease_volume exec ${musicPlayer}-remote -v -10% # decrease volume"
 add_alias "alias music_player_increase_volume exec ${musicPlayer}-remote -v +10% # increase volume"
 ;;
