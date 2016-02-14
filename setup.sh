@@ -72,7 +72,7 @@ exec ratpoison' > $HOME/.xinitrc
 install_default_programs()
 {
 programList=""
-for i in lxterminal pcmanfm seamonkey xmms2 ; do
+for i in leafpad lxterminal pcmanfm seamonkey xmms2 qalculate-gtk-nognome ; do
 if ! hash $i &> /dev/null ; then
 programList="${programList}$i "
 fi
