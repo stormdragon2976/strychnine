@@ -345,7 +345,16 @@ fi
 if hash mumble &> /dev/null ; then
 add_setting bind m exec /usr/bin/mumble
 fi
-if hash skype &> /dev/null ; then
+if command -v linphonecsh &> /dev/null ; then
+linphone="true"
+add_setting bind M-F1 exec linphonech generic terminate
+add_setting bind M-F2 exec linphonecsh generic answer
+add_alias alias linphone_hold exec 'if [[ -z "$LINPHONEHOLD" || "$LINPHONEHOLD" = "false" ]]; then export LINPHONEHOLD="true";linphonecsh generic pause;else export LINPHONEHOLD="false";linphonecsh generic resume;fi'
+add_setting bind M-F3 exec linphone_hold
+add_alias alias get_live_help exec linphonecsh dial sip:stormdragon2976@iptel.org
+add_setting bind m-F4 get_live_help 
+fi
+if command -v skype &> /dev/null ; then
 add_setting bind C-F1 exec skype skype:?hangup
 add_setting bind C-F2 exec skype skype:?answercall
 add_setting bind C-F3 exec skype skype:?ignorecall
@@ -389,7 +398,10 @@ fi
 # Additional startup programs
 programList="/usr/bin/orca "
 if command -v glipper &> /dev/null ; then
-programList="${programList}/usr/bin/glipper "
+programList="${programList}$(command -v glipper) "
+fi
+if command -v linphonecsh &> /dev/null ; then
+programList="${programList}$(command -v linphonecsh) "
 fi
 if [ $workspaces -eq 1 ]; then
 if [ "${fileBrowser##*/}" = "nemo" ]; then
@@ -404,7 +416,11 @@ read -e -i "$programList" programs
 if [ -n "$programs" ]; then
 for i in $programs ; do
 if command -v $(echo "${i##*/}" | sed 's/%20.*//') &> /dev/null ; then
+if [ "$i" = "$(command -v linphonecsh)" ]; then
+add_setting exec $(command -v linphonecsh) init -c $HOME/.linphonerc
+else
 add_setting exec ${i//\%20/ }
+fi
 else
 echo "$i was not found."
 fi
