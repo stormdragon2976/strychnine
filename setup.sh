@@ -346,12 +346,11 @@ if hash mumble &> /dev/null ; then
 add_setting bind m exec /usr/bin/mumble
 fi
 if command -v linphonecsh &> /dev/null ; then
-linphone="true"
-add_setting bind M-F1 exec linphonech generic terminate
-add_setting bind M-F2 exec linphonecsh generic answer
-add_alias alias linphone_hold exec 'if [[ -z "$LINPHONEHOLD" || "$LINPHONEHOLD" = "false" ]]; then export LINPHONEHOLD="true";linphonecsh generic pause;else export LINPHONEHOLD="false";linphonecsh generic resume;fi'
-add_setting bind M-F3 exec linphone_hold
-add_alias alias get_live_help exec linphonecsh dial sip:stormdragon2976@iptel.org
+add_setting bind M-F1 exec $(command -v linphonecsh) generic terminate
+add_setting bind M-F2 exec $(command -v linphonecsh) generic answer
+add_alias alias linphone_hold exec 'if [[ "$('$(command -v linphonecsh)' status hook)" =~ Call\ out,\ hook=.* ]]; then '$(command -v linphonecsh)' generic pause;else '$(command -v linphonecsh)' generic resume;fi'
+add_setting bind M-F3 linphone_hold
+add_alias alias get_live_help exec $(command -v linphonecsh) dial sip:stormdragon2976@iptel.org
 add_setting bind m-F4 get_live_help 
 fi
 if command -v skype &> /dev/null ; then
