@@ -348,7 +348,7 @@ fi
 if command -v linphonecsh &> /dev/null ; then
 add_alias alias terminate_call exec $(command -v linphonecsh) generic terminate '&&' "$notify" '"Call ended."'
 add_setting bind M-F1 terminate_call
-add_alias alias answer_call exec $(command -v linphonecsh) generic answer'&&'"$notify" '"Answered call from $(command -v linphonecsh status hook | cut -d = -f2 | cut -d \  -f1)"'
+add_alias alias answer_call exec $(command -v linphonecsh) generic answer'&&'"$notify" '"Answered call from $(command linphonecsh status hook | cut -d = -f2 | cut -d \  -f1)"'
 add_setting bind M-F2 answer_call
 add_alias alias linphone_hold exec 'if [[ "$('$(command -v linphonecsh)' status hook)" =~ Call\ out,\ hook=.* ]]; then '$(command -v linphonecsh)' generic pause;else '$(command -v linphonecsh)' generic resume;fi'
 add_setting bind M-F3 linphone_hold
