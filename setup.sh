@@ -346,12 +346,16 @@ if hash mumble &> /dev/null ; then
 add_setting bind m exec /usr/bin/mumble
 fi
 if command -v linphonecsh &> /dev/null ; then
-add_setting bind M-F1 exec $(command -v linphonecsh) generic terminate
-add_setting bind M-F2 exec $(command -v linphonecsh) generic answer
+add_alias alias terminate_call exec $(command -v linphonecsh) generic terminate '&&' "$notify" '"Call ended."'
+add_setting bind M-F1 terminate_call
+add_alias alias answer_call exec $(command -v linphonecsh) generic answer'&&'"$notify" '"Answered call from $(command -v linphonecsh status hook | cut -d = -f2 | cut -d \  -f1)"'
+add_setting bind M-F2 answer_call
 add_alias alias linphone_hold exec 'if [[ "$('$(command -v linphonecsh)' status hook)" =~ Call\ out,\ hook=.* ]]; then '$(command -v linphonecsh)' generic pause;else '$(command -v linphonecsh)' generic resume;fi'
 add_setting bind M-F3 linphone_hold
 add_alias alias get_live_help exec $(command -v linphonecsh) dial sip:stormdragon2976@iptel.org
 add_setting bind m-F4 get_live_help 
+add_alias alias call_contact exec 'ifs="$IFS";'"IFS=$'\n';"'sipAddress="$(yad --list --title="Ratpoison" --text "Select contact to call:" --radiolist --column "" --column "Name" --column "Sip Address" $('$(command -v linphonecsh)' generic "friend list" | grep -v "^\*\*" | sed -e "s/^name: /FALSE\n/g" -e "s/^address: //g"))";IFS="$ifs";if [ -n "$sipAddress" ]; then sipAddress="$(echo "$sipAddress" | cut -d \| -f3)";linphonecsh dial "$sipAddress"&&'"$notify"' "Calling $sipAddress";fi'
+add_setting bind M-F5 call_contact
 fi
 if command -v skype &> /dev/null ; then
 add_setting bind C-F1 exec skype skype:?hangup
