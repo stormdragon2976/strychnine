@@ -350,7 +350,7 @@ add_alias alias terminate_call exec $(command -v linphonecsh) generic terminate 
 add_setting bind M-F1 terminate_call
 add_alias alias answer_call exec $(command -v linphonecsh) generic answer'&&'"$notify" '"Answered call from $(command linphonecsh status hook | cut -d = -f2 | cut -d \  -f1)"'
 add_setting bind M-F2 answer_call
-add_alias alias linphone_hold exec 'if [[ "$('$(command -v linphonecsh)' status hook)" =~ Call\ out,\ hook=.* || "$('$(command -v linphonecsh)' status hook)" =~ hook=answ.* ]]; then '$(command -v linphonecsh)' generic pause;else '$(command -v linphonecsh)' generic resume;fi'
+add_alias alias linphone_hold exec 'if [[ "$('$(command -v linphonecsh)' status hook)" =~ .*muted=no\ rtp.* ]]; then '$(command -v linphonecsh)' generic mute;'"$notify \"Call muted.\""';elif [[ "$('$(command -v linphonecsh)' status hook)" =~ .*muted=yes\ rtp.* ]]; then '$(command -v linphonecsh)' generic unmute;'"$notify \"Call unmuted\""';fi'
 add_setting bind M-F3 linphone_hold
 add_alias alias get_live_help exec $(command -v linphonecsh) dial sip:stormdragon2976@iptel.org
 add_setting bind m-F4 get_live_help 
