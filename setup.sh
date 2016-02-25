@@ -436,6 +436,7 @@ echo "$i was not found."
 fi
 done
 fi
+add_setting exec 'if [ "$(gsettings get org.gnome.desktop.a11y.applications screen-reader-enabled)" != "true" ]; then gsettings set org.gnome.desktop.a11y.applications screen-reader-enabled true&&' "$notify \"QT5 accessibility enabled. You need to restart ratpoison for the changes to take affect.\""';fi'
 if [ -f "$HOME/.ratpoisonrc" ]; then
 get_input continue "$HOME/.ratpoisonrc exists. Over write it?" yes no
 if [ "$continue" = "no" ]; then
