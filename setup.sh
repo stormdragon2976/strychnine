@@ -189,7 +189,7 @@ path="$(readlink -f $0)"
 path="${path%/*}"
 if ! command -v notify-send &> /dev/null ; then
 get_input timeOut "How many seconds should notifications stay on screen before disappearing?" $(echo "-5" {6..30})
-notify="yad --info --timeout $timeOut --no-buttons --title 'notification' --text"
+notify="zenity --info --timeout $timeOut --title 'notification' --text"
 else
 notify="notify-send"
 fi
@@ -237,7 +237,7 @@ if command -v ocrdesktop &> /dev/null ; then
 add_setting definekey top Print exec $(command -v ocrdesktop) -d
 fi
 add_setting bind exclam run_dialog
-add_alias alias ratpoison_keybindings exec 'f=$(mktemp);ratpoison -c "help root" > $f && yad --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
+add_alias alias ratpoison_keybindings exec 'f=$(mktemp);ratpoison -c "help root" > $f && zenity --text-info --title "Ratpoison Keybindings" --cancel-label "Close" --ok-label "Close" --filename "$f";rm "$f"'
 add_setting bind question ratpoison_keybindings
 # Figure out which terminal emulator to use:
 unset programList
@@ -354,7 +354,7 @@ add_alias alias linphone_hold exec 'if [[ "$('$(command -v linphonecsh)' status 
 add_setting bind M-F3 linphone_hold
 add_alias alias get_live_help exec $(command -v linphonecsh) dial sip:stormdragon2976@iptel.org
 add_setting bind m-F4 get_live_help 
-add_alias alias call_contact exec 'ifs="$IFS";'"IFS=$'\n';"'sipAddress="$(yad --list --title="Ratpoison" --text "Select contact to call:" --radiolist --column "" --column "Name" --column "Sip Address" $('$(command -v linphonecsh)' generic "friend list" | grep -v "^\*\*" | sed -e "s/^name: /FALSE\n/g" -e "s/^address: //g"))";IFS="$ifs";if [ -n "$sipAddress" ]; then sipAddress="$(echo "$sipAddress" | cut -d \| -f3)";linphonecsh dial "$sipAddress"&&'"$notify"' "Calling $sipAddress";fi'
+add_alias alias call_contact exec 'ifs="$IFS";'"IFS=$'\n';"'sipAddress="$(zenity --list --title="Ratpoison" --text "Select contact to call:" --radiolist --column "" --column "Name" --column "Sip Address" $('$(command -v linphonecsh)' generic "friend list" | grep -v "^\*\*" | sed -e "s/^name: /FALSE\n/g" -e "s/^address: //g"))";IFS="$ifs";if [ -n "$sipAddress" ]; then sipAddress="$(echo "$sipAddress" | cut -d \| -f3)";linphonecsh dial "$sipAddress"&&'"$notify"' "Calling $sipAddress";fi'
 add_setting bind M-F5 call_contact
 fi
 if command -v linphone &> /dev/null ; then
@@ -374,9 +374,9 @@ add_setting bind M-t exec $(command -v talking-clock) '-c'
 fi
 add_setting bind c exec /usr/bin/$terminal
 add_setting bind C-c exec /usr/bin/$terminal
-add_alias 'alias run_dialog exec c="$(yad --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
+add_alias 'alias run_dialog exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
 add_setting bind C-exclam run_dialog
-add_alias alias set_window_name exec 't="$(yad --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
+add_alias alias set_window_name exec 't="$(zenity --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
 add_setting bind C-A set_window_name
 add_setting bind A set_window_name
 add_alias alias show_date exec "$notify" '"$(date +"%A, %B %d, %Y%n%I:%M%p")"'
@@ -387,10 +387,10 @@ add_setting bind O exec /usr/bin/orca -r '# Restart Orca'
 add_alias alias ratpoison_version exec "$notify" '"$(ratpoison -c "version")"'
 add_setting bind C-v ratpoison_version
 add_setting bind v ratpoison_version
-add_alias alias window_menu exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(yad --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
+add_alias alias window_menu exec 'ifs="$IFS";IFS=$'"'"\\n"'"';w="$(zenity --list --title "Ratpoison" --text "Select Window" --column "Select" $(ratpoison -c "windows"))";IFS="$ifs";ratpoison -c "select ${w:0:1}"'
 add_setting bind C-apostrophe window_menu
 add_setting bind apostrophe window_menu
-add_alias alias run_ratpoison_command exec 'c="$(yad --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
+add_alias alias run_ratpoison_command exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
 add_setting bind colon run_ratpoison_command
 add_setting bind C-colon exec ratpoison -c "\"source $HOME/.ratpoisonrc\""
 add_setting bind C-M-r restart
