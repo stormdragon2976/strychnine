@@ -392,7 +392,8 @@ add_setting bind C-apostrophe window_menu
 add_setting bind apostrophe window_menu
 add_alias alias run_ratpoison_command exec 'c="$(zenity --entry --title "Ratpoison" --text="Enter Ratpoison command:")" && ratpoison -c "$c"'
 add_setting bind colon run_ratpoison_command
-add_setting bind C-colon exec ratpoison -c "\"source $HOME/.ratpoisonrc\""
+add_alias alias reload_ratpoison_configuration exec ratpoison -c "\"source $HOME/.ratpoisonrc\"&&$notify \"Ratpoison configuration reloaded\""
+add_setting bind C-colon reload_ratpoison_configuration
 add_setting bind C-M-r restart
 add_setting bind C-M-q quit
 
