@@ -240,6 +240,11 @@ add_setting $'\n'"# Key binding section"
 if [ "$escapeKey" != "C-t" ]; then
 add_setting escape $escapeKey
 fi
+get_input answer "Bind alt+f2 to run_dialog:" yes -no
+if [ "$answer" = "yes" ]; then
+add_setting "# Alt+f2 executes the run dialog"
+add_setting definekey top M-F2 run_dialog
+fi
 add_setting "# Alt+tab switches through open windows"
 add_setting definekey top M-Tab next
 add_setting definekey top M-ISO_Left_Tab prev
@@ -384,8 +389,9 @@ add_setting bind M-t exec $(command -v talking-clock) '-c'
 fi
 add_setting bind c exec /usr/bin/$terminal
 add_setting bind C-c exec /usr/bin/$terminal
-add_alias 'alias run_dialog exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
-add_setting bind C-exclam run_dialog
+add_alias 'alias run_dialog exec historyPath="${XDG_CONFIG_HOME:-$HOME/.config}/strychnine";if ! [ -d "$historyPath" ]; then mkdir -p "$historyPath";fi;write_history(){ oldHistory="$(head -n 49 "$historyPath/history")";if ! grep "$txt" "$historyPath/history" ; then if [ -n "$oldHistory" ]; then echo -e "$txt\n$oldHistory" > "$historyPath/history";else echo "$txt" > "$historyPath/history";fi;else oldHistory="$(echo "$oldHistory" | sed "/$txt/d")";echo -e "$txt\n$oldHistory" > "$historyPath/history";fi; };if [ -f "$historyPath/history" ]; then txt=$(zenity --list --editable --title "Ratpoison" --text "Execute program or enter file" --ok-label Open --separator "\n" --column "Select from list or enter new" < "$historyPath/history");else txt=$(zenity --entry --title "Ratpoison" --text "Execute program or enter file" --ok-label Open);fi;if [ -z "$txt" ]; then exit 0;fi;if [[ "$txt" =~ ^ftp://|http://|https://|www.* ]]; then '"$webBrowser"' $txt;write_history;exit 0;fi;if [[ "$txt" =~ ^mailto://.* ]]; then xdg-email $txt;write_history;exit 0;fi;if command -v "$(echo "$txt" | cut -d " " -f1)" &> /dev/null ; then eval $txt& else (xdg-open $txt || '"$fileBrowser"')&fi;write_history;exit 0'
+add_alias 'alias run_in_terminal_dialog exec c="$(zenity --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
+add_setting bind C-exclam run_in_terminal_dialog
 add_alias alias set_window_name exec 't="$(zenity --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
 add_setting bind C-A set_window_name
 add_setting bind A set_window_name
