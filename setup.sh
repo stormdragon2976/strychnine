@@ -111,6 +111,16 @@ set_music_keybindings()
 {
 add_setting "# Music player bindings:"
 case "${1##*/}" in
+"audacious")
+musicPlayer="${musicPlayer/audacious/audtool}"
+add_alias "alias music_player_previous_track exec ${musicPlayer} --playlist-reverse && $notify \"\$(${musicPlayer} --current-song)\" # previous track"
+add_alias "alias music_player_play exec ${musicPlayer} --playback-play  && $notify \"\$(${musicPlayer} --current-song)\" # play"
+add_alias "alias music_player_pause exec ${musicPlayer} --playback-playpause  && $notify \"\$(${musicPlayer} --current-song)\" # pause"
+add_alias "alias music_player_stop exec ${musicPlayer} --playback-stop # stop"
+add_alias "alias music_player_next_track exec ${musicPlayer} --playlist-advance  && $notify \"\$(${musicPlayer} --current-song)\" # next track"
+add_alias "alias music_player_decrease_volume exec ${musicPlayer} --set-volume \$((\$(${musicPlayer} --get-volume) - 10)) # decrease volume"
+add_alias "alias music_player_increase_volume exec ${musicPlayer} --set-volume \$((\$(${musicPlayer} --get-volume) + 10)) # increase volume"
+;;
 "cmus")
 add_alias "alias music_player_previous_track exec ${musicPlayer}-remote -r && $notify \"\$(${musicPlayer}-remote -Q | head -n2 | tr \"[:space:]\" \" \" | sed -e 's/^status //' -e 's/ : /: /' -e \"s#file $HOME/##\" -e 's/^music\|media\///i' -e's#/# - #g' -e 's/\([^\/]*\)\.[^.\/]*$/\1/')\" # previous track"
 add_alias "alias music_player_play exec ${musicPlayer}-remote -p && $notify \"\$(${musicPlayer}-remote -Q | head -n2 | tr \"[:space:]\" \" \" | sed -e 's/^status //' -e 's/ : /: /' -e \"s#file $HOME/##\" -e 's/^music\|media\///i' -e 's#/# - #g' -e 's/\([^\/]*\)\.[^.\/]*$/\1/')\" # play"
@@ -260,7 +270,7 @@ terminal="${programList/#-/}"
 fi
 # Configure music player
 unset programList
-for i in cmus moc mopity mpc pianobar -xmms2 ; do
+for i in audacious cmus moc mopity mpc pianobar -xmms2 ; do
 if command -v ${i/#-/} &> /dev/null ; then
 if [ -n "$programList" ]; then
 programList="$programList $i"
