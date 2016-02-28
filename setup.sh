@@ -261,7 +261,7 @@ if command -v ocrdesktop &> /dev/null ; then
 add_setting definekey top Print exec $(command -v ocrdesktop) -d
 fi
 add_setting bind exclam run_dialog
-add_alias alias ratpoison_keybindings exec 'f=$(mktemp);ratpoison -c "help root" > $f && yad --text-info --title "Ratpoison Keybindings" --button "Close:0" --filename "$f";rm "$f"'
+add_alias alias ratpoison_keybindings exec 'f=$(mktemp);ratpoison -c "help root" > $f && yad --text-info --show-cursor --title "Ratpoison Keybindings" --button "Close:0" --filename "$f";rm "$f"'
 add_setting bind question ratpoison_keybindings
 # Figure out which terminal emulator to use:
 unset programList
@@ -398,7 +398,7 @@ add_setting bind M-t exec $(command -v talking-clock) '-c'
 fi
 add_setting bind c exec /usr/bin/$terminal
 add_setting bind C-c exec /usr/bin/$terminal
-add_alias 'alias run_dialog exec historyPath="${XDG_CONFIG_HOME:-$HOME/.config}/strychnine";if ! [ -d "$historyPath" ]; then mkdir -p "$historyPath";fi;write_history(){ oldHistory="$(grep -v "$txt" "$historyPath/history" | head -n 49)";echo -e "$txt\n$oldHistory" | sed '"'s/^$//g'"' > "$historyPath/history"; };if [ -f "$historyPath/history" ]; then txt=$(yad --entry --editable --title "Ratpoison" --text "Execute program or enter file" --button "Open:0" --separator "\n" --rest "$historyPath/history");else txt=$(yad --entry --title "Ratpoison" --text "Execute program or enter file" --button "Open:0");fi;if [ -z "$txt" ]; then exit 0;fi;if [[ "$txt" =~ ^ftp://|http://|https://|www.* ]]; then '"$webBrowser"' $txt;write_history;exit 0;fi;if [[ "$txt" =~ ^mailto://.* ]]; then xdg-email $txt;write_history;exit 0;fi;if [[ "$txt" =~ ^man://.* ]]; then eval "${txt/:\/\// }" | yad --text-info --button "Close:0" --title "Ratpoison" -;write_history;exit 0;fi;if command -v "$(echo "$txt" | cut -d " " -f1)" &> /dev/null ; then eval $txt& else (xdg-open $txt || '"$fileBrowser"')&fi;write_history;exit 0'
+add_alias 'alias run_dialog exec historyPath="${XDG_CONFIG_HOME:-$HOME/.config}/strychnine";if ! [ -d "$historyPath" ]; then mkdir -p "$historyPath";fi;write_history(){ oldHistory="$(grep -v "$txt" "$historyPath/history" | head -n 49)";echo -e "$txt\n$oldHistory" | sed '"'s/^$//g'"' > "$historyPath/history"; };if [ -f "$historyPath/history" ]; then txt=$(yad --entry --editable --title "Ratpoison" --text "Execute program or enter file" --button "Open:0" --separator "\n" --rest "$historyPath/history");else txt=$(yad --entry --title "Ratpoison" --text "Execute program or enter file" --button "Open:0");fi;if [ -z "$txt" ]; then exit 0;fi;if [[ "$txt" =~ ^ftp://|http://|https://|www.* ]]; then '"$webBrowser"' $txt;write_history;exit 0;fi;if [[ "$txt" =~ ^mailto://.* ]]; then xdg-email $txt;write_history;exit 0;fi;if [[ "$txt" =~ ^man://.* ]]; then eval "${txt/:\/\// }" | yad --text-info --show-cursor --button "Close:0" --title "Ratpoison" -;write_history;exit 0;fi;if command -v "$(echo "$txt" | cut -d " " -f1)" &> /dev/null ; then eval $txt& else (xdg-open $txt || '"$fileBrowser"')&fi;write_history;exit 0'
 add_alias 'alias run_in_terminal_dialog exec c="$(yad --entry --title "Ratpoison" --text "Enter command:")" &&' /usr/bin/$terminal -e '$c'
 add_setting bind C-exclam run_in_terminal_dialog
 add_alias alias set_window_name exec 't="$(yad --entry --title "Ratpoison" --text "Enter window name") && ratpoison -c "title $t"'
