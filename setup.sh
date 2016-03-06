@@ -453,6 +453,7 @@ for i in $programs ; do
 if command -v $(echo "${i##*/}" | sed 's/%20.*//') &> /dev/null ; then
 if [ "$i" = "$(command -v linphonecsh)" ]; then
 add_setting exec $(command -v linphonecsh) init -c $HOME/.linphonerc
+add_setting exec 'while : ; do incomingCall="$('"$(command -v linphonecsh)"' status hook)";if [[ "$incomingCall" =~ ^Incoming\ call.* ]]; then '"$notify"' "$incomingCall";sleep 9.25;fi;sleep .75;done'
 else
 add_setting exec ${i//\%20/ }
 fi
