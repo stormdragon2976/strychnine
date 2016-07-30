@@ -72,7 +72,7 @@ exec ratpoison' > $HOME/.xinitrc
 install_default_programs()
 {
 programList=""
-for i in leafpad lxterminal pcmanfm seamonkey xmms2 qalculate-gtk-nognome ; do
+for i in leafpad lxterminal pcmanfm seamonkey audacious qalculate-gtk-nognome ; do
 if ! hash $i &> /dev/null ; then
 programList="${programList}$i "
 fi
@@ -284,7 +284,7 @@ terminal="${programList/#-/}"
 fi
 # Configure music player
 unset programList
-for i in audacious cmus moc mopity mpc pianobar -xmms2 ; do
+for i in -audacious cmus moc mopity mpc pianobar xmms2 ; do
 if command -v ${i/#-/} &> /dev/null ; then
 if [ -n "$programList" ]; then
 programList="$programList $i"
@@ -435,16 +435,17 @@ programList="/usr/bin/orca "
 if command -v glipper &> /dev/null ; then
 programList="${programList}$(command -v glipper) "
 fi
+if command -v hubic &> /dev/null ; then
+programList="${programList}$(command -v hubic)%20start "
+fi
 if command -v linphonecsh &> /dev/null ; then
 programList="${programList}$(command -v linphonecsh) "
 fi
-if [ $workspaces -eq 1 ]; then
 if [ "${fileBrowser##*/}" = "nemo" ]; then
 programList="${programList}${fileBrowser}%20-n"
 fi
 if [ "${fileBrowser##*/}" = "pcmanfm" ]; then
 programList="${programList}${fileBrowser}%20--desktop"
-fi
 fi
 echo "Enter any programs you want started automatically separated by spaces (If your program requires a space, type %20):" | fold -s -w $(tput cols)
 read -e -i "$programList" programs
