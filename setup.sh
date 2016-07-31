@@ -249,7 +249,7 @@ add_setting $'\n'"# Key binding section"
 if [ "$escapeKey" != "C-t" ]; then
 add_setting escape $escapeKey
 fi
-get_input answer "Bind alt+f2 to run_dialog:" yes -no
+get_input answer "Bind alt+f2 to run_dialog:" -yes no
 if [ "$answer" = "yes" ]; then
 add_setting "# Alt+f2 executes the run dialog"
 add_setting definekey top M-F2 run_dialog
@@ -371,15 +371,15 @@ add_setting bind m exec /usr/bin/mumble
 fi
 if command -v linphonecsh &> /dev/null ; then
 add_alias alias terminate_call exec $(command -v linphonecsh) generic terminate '&&' "$notify" '"Call ended."'
-add_setting bind M-F1 terminate_call
+add_setting bind C-F1 terminate_call
 add_alias alias answer_call exec $(command -v linphonecsh) generic answer'&&'"$notify" '"Answered call from $(command linphonecsh status hook | cut -d = -f2 | cut -d \  -f1)"'
-add_setting bind M-F2 answer_call
+add_setting bind C-F2 answer_call
 add_alias alias linphone_hold exec 'if [[ "$('$(command -v linphonecsh)' status hook)" =~ .*muted=no\ rtp.* ]]; then '$(command -v linphonecsh)' generic mute;'"$notify \"Call muted.\""';elif [[ "$('$(command -v linphonecsh)' status hook)" =~ .*muted=yes\ rtp.* ]]; then '$(command -v linphonecsh)' generic unmute;'"$notify \"Call unmuted\""';fi'
-add_setting bind M-F3 linphone_hold
+add_setting bind C-F3 linphone_hold
 add_alias alias get_live_help exec $(command -v linphonecsh) dial sip:stormdragon2976@iptel.org
-add_setting bind m-F4 get_live_help 
+add_setting bind C-F4 get_live_help 
 add_alias alias call_contact exec 'ifs="$IFS";'"IFS=$'\n';"'sipAddress="$(yad --list --title="Ratpoison" --text "Select contact to call:" --radiolist --column "" --column "Name" --column "Sip Address" $('$(command -v linphonecsh)' generic "friend list" | grep -v "^\*\*" | sed -e "s/^name: /FALSE\n/g" -e "s/^address: //g"))";IFS="$ifs";if [ -n "$sipAddress" ]; then sipAddress="$(echo "$sipAddress" | cut -d \| -f3)";linphonecsh dial "$sipAddress"&&'"$notify"' "Calling $sipAddress";fi'
-add_setting bind M-F5 call_contact
+add_setting bind C-F5 call_contact
 fi
 if command -v linphone &> /dev/null ; then
 add_setting bind M-p exec $(command -v linphone)
@@ -425,9 +425,21 @@ add_setting bind C-M-q quit
 # Autostart section
 add_setting $'\n'"# Autostart section"
 if hash rpws &> /dev/null ; then
-get_input workspaces "Select desired number of workspaces:" -1 {2..8}
+get_input workspaces "Select desired number of workspaces:" -1 {2..4}
 if [ $workspaces -gt 1 ]; then
 add_setting exec /usr/bin/rpws init $workspaces -k
+add_alias alias go_to_workspace_one exec rpws 1
+add_alias alias go_to_workspace_two exec rpws 2
+add_setting bind Up go_to_workspace_one
+add_setting bind Left go_to_workspace_two
+fi
+if [ $workspaces -ge 3 ]; then
+add_alias alias go_to_workspace_three exec rpws 3
+add_setting bind Down go_to_workspace_three
+fi
+if [ $workspaces -ge 4 ]; then
+add_alias alias go_to_workspace_four exec rpws 4
+add_setting bind Right go_to_workspace_four
 fi
 fi
 # Additional startup programs
