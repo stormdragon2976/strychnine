@@ -232,9 +232,17 @@ add_setting unbind C-t
 add_setting unbind C-v
 add_setting unbind v
 add_setting unbind C-w
+add_setting unbind C-Down
+add_setting unbind Down
 add_setting unbind C-exclam
 add_setting unbind exclam
+add_setting unbind C-Left
+add_setting unbind Left
 add_setting unbind question
+add_setting unbind C-Right
+add_setting unbind Right
+add_setting unbind C-Up
+add_setting unbind Up
 add_setting unbind C-apostrophe
 add_setting unbind apostrophe
 add_setting unbind colon
@@ -425,7 +433,7 @@ add_setting bind C-M-q quit
 # Autostart section
 add_setting $'\n'"# Autostart section"
 if hash rpws &> /dev/null ; then
-get_input workspaces "Select desired number of workspaces:" -1 {2..4}
+get_input workspaces "Select desired number of workspaces:" -1 {2..8}
 if [ $workspaces -gt 1 ]; then
 add_setting exec /usr/bin/rpws init $workspaces -k
 add_alias alias go_to_workspace_one exec rpws 1
@@ -440,6 +448,22 @@ fi
 if [ $workspaces -ge 4 ]; then
 add_alias alias go_to_workspace_four exec rpws 4
 add_setting bind Right go_to_workspace_four
+fi
+if [ $workspaces -ge 5 ]; then
+add_alias alias go_to_workspace_five exec rpws 5
+add_setting bind C-Up go_to_workspace_five
+fi
+if [ $workspaces -ge 6 ]; then
+add_alias alias go_to_workspace_six exec rpws 6
+add_setting bind C-Left go_to_workspace_six
+fi
+if [ $workspaces -ge 7 ]; then
+add_alias alias go_to_workspace_seven exec rpws 7
+add_setting bind C-Down go_to_workspace_seven
+fi
+if [ $workspaces -eq 8 ]; then
+add_alias alias go_to_workspace_eight exec rpws 8
+add_setting bind C-Right go_to_workspace_eight
 fi
 fi
 # Additional startup programs
