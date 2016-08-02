@@ -257,7 +257,7 @@ add_setting $'\n'"# Key binding section"
 if [ "$escapeKey" != "C-t" ]; then
 add_setting escape $escapeKey
 fi
-get_input answer "Bind alt+f2 to run_dialog:" -yes no
+get_input answer "Bind alt+f2 to run_dialog (does not work with multiple workspaces):" -yes no
 if [ "$answer" = "yes" ]; then
 add_setting "# Alt+f2 executes the run dialog"
 add_setting definekey top M-F2 run_dialog
@@ -393,10 +393,10 @@ if command -v linphone &> /dev/null ; then
 add_setting bind M-p exec $(command -v linphone)
 fi
 if command -v skype &> /dev/null ; then
-add_setting bind C-F1 exec skype skype:?hangup
-add_setting bind C-F2 exec skype skype:?answercall
-add_setting bind C-F3 exec skype skype:?ignorecall
-add_setting bind C-F4 exec skype skype:
+add_setting bind C-F9 exec skype skype:?hangup
+add_setting bind C-F10 exec skype skype:?answercall
+add_setting bind C-F11 exec skype skype:?ignorecall
+add_setting bind C-F12 exec skype skype:
 fi
 if command -v pidgin &> /dev/null ; then
 add_setting bind p exec $(command -v pidgin)
