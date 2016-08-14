@@ -173,13 +173,13 @@ esac
 if hash gasher &> /dev/null ; then
 add_setting bind G exec gasher -M '# Submit currently playing song to GNU Social'
 fi
-add_setting "bind M-z music_player_previous_track"
-add_setting "bind M-x music_player_play"
-add_setting "bind M-c music_player_pause"
-add_setting "bind M-v music_player_stop"
-add_setting "bind M-b music_player_next_track"
-add_setting "bind M-minus music_player_decrease_volume"
-add_setting "bind M-equal music_player_increase_volume"
+add_setting "bind M-Z music_player_previous_track"
+add_setting "bind M-X music_player_play"
+add_setting "bind M-C music_player_pause"
+add_setting "bind M-V music_player_stop"
+add_setting "bind M-B music_player_next_track"
+add_setting "bind M-underscore music_player_decrease_volume"
+add_setting "bind M-plus music_player_increase_volume"
 }
 
 # Install default programs if requested
@@ -467,7 +467,11 @@ add_setting bind C-Right go_to_workspace_eight
 fi
 fi
 # Additional startup programs
-programList="/usr/bin/orca "
+programList="$(command -v orca) "
+get_input brlapi "Do you want to use a braille display with Orca? " yes -no
+if [ "$brlapi" = "yes" ]; then
+programList="$(command -v xbrlapi)%20-q "
+fi
 if command -v glipper &> /dev/null ; then
 programList="${programList}$(command -v glipper) "
 fi
